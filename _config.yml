@@ -1,1 +1,60 @@
-theme: jekyll-theme-tactile
+# Site settings
+title: 燎原之火
+subtitle: ZM-BAD的小站
+keywords: 计算机技术, Linux, Python, Web, Java
+description: 欢迎来访我的世界
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://zmbad.me"
+page_no_title: "燎原之火 | ZM-BAD的小站"
+beian: # "备案号"
+author: ZM-BAD
+email: prozm.bad@gmail.com
+
+# Build settings
+permalink: /:year/:month/:day/:title/
+exclude: ["README.md", "changelog.md", "server", "tools", "Pipfile"]
+plugins: [jekyll-paginate]
+markdown: redcarpet
+redcarpet:
+    extensions: ["fenced_code_blocks",
+                 "tables",
+                 "highlight",
+                 "strikethrough",
+                 "no_intra_emphasis",
+                 "with_toc_data"]
+
+# Pageinate settings
+paginate: 8 # 分页大小
+paginate_path: "page/:num/"
+
+# Search settings
+baidu_search: true
+google_search: true
+
+# Menu settings
+menu:
+  - page: 首页
+    directory: .
+    icon: icon-home
+  - page: 归档
+    directory: archives/
+    icon: icon-archive
+  - page: 标签
+    directory: tags/
+    icon: icon-tags
+  - page: 分类
+    directory: category/
+    icon: icon-post-category
+  - page: 关于
+    directory: about/
+    icon: icon-about
+
+# Link settings
+links: # 友情链接
+  - title: Jekyll
+    url: https://jekyllrb.com/
+
+# Code hub settings
+codehub: # 代码仓库
+  - title: Github
+    url: https://github.com/ZM-BAD
