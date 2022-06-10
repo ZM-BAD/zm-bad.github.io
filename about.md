@@ -4,8 +4,7 @@ title: 关于
 permalink: /about/
 ---
 
-野生程序员一名，目前主要从事后端开发，正在朝着全栈方向努力。常用昵称：ZM-BAD，zm_bad。
-业余时间喜欢搞搞键政，水平一般。
+程序员一名，目前主要从事Java后端开发，正在朝着全栈方向努力。常用昵称：ZM-BAD，zm_bad。
 
 
 # 个人经历
@@ -24,7 +23,9 @@ permalink: /about/
 
 * **GitHub**：[ZM-BAD](https://github.com/ZM-BAD)
 
-* **Linkedin**：[Ming Zhou](https://www.linkedin.com/in/ming-zhou-60169913b/)
+* **B站直播间**：[ZM-BAD](http://live.bilibili.com/10352267)
+
+* **网易云音乐**：[ZM-BAD](https://music.163.com/#/user/home?id=100471707)
 
 * **邮件**：<prozm.bad@gmail.com>
 
