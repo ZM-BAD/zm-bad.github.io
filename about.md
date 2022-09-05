@@ -12,7 +12,7 @@ permalink: /about/
 
 * [依图科技](https://yitutech.com)  2018.07 ~ 2018.10  人像大平台开发
 
-* [老虎证券](https://www.itigergrowth.com/)  2019.03 ~ 2021.07  券商交易平台，风控方向研发
+* [老虎证券](https://www.itigerup.com/)  2019.03 ~ 2021.07  券商交易平台，风控方向研发
 
 * [蚂蚁集团](https://www.antgroup.com)  2021.08 ~ 现在  消费信贷&营销开发
 
