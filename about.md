@@ -14,7 +14,7 @@ permalink: /about/
 
 * [老虎证券](https://www.itigerup.com/)  2019.03 ~ 2021.07  券商交易平台，风控方向研发
 
-* [蚂蚁集团](https://www.antgroup.com)  2021.08 ~ 现在  消费信贷&营销开发
+* [蚂蚁集团](https://www.antgroup.com)  2021.08 ~ 2023.09  消费金融&营销开发
 
 # 社交账号
 * **知乎**：[ZM-BAD](https://www.zhihu.com/people/ref13ct)
