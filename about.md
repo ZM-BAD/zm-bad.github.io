@@ -10,7 +10,7 @@ permalink: /about/
 # 个人经历
 * [浙江大学](https://www.zju.edu.cn)  2014.09 ~ 2018.07  测控技术与仪器 学士
 
-* [依图科技](https://yitutech.com)  2018.07 ~ 2018.10  人像大平台开发
+* [依图科技](https://www.yitutech.com)  2018.07 ~ 2018.10  人像大平台开发
 
 * [老虎证券](https://www.itigerup.com/)  2019.03 ~ 2021.07  券商交易平台，风控方向研发
 
