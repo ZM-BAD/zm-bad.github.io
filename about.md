@@ -16,6 +16,8 @@ permalink: /about/
 
 * [蚂蚁集团](https://www.antgroup.com)  2021.08 ~ 2023.09  消费金融&营销开发
 
+* [极氪](https://www.zeekrlife.com) 2023.12 ~ 至今 交付履约
+
 # 社交账号
 * **知乎**：[ZM-BAD](https://www.zhihu.com/people/ref13ct)
 
