@@ -23,12 +23,6 @@ permalink: /about/
 
 * **微博**：[ZM-BAD](https://weibo.com/u/5318613756)
 
-* **GitHub**：[ZM-BAD](https://github.com/ZM-BAD)
-
-* **B站直播间**：[ZM-BAD](http://live.bilibili.com/10352267)
-
-* **网易云音乐**：[ZM-BAD](https://music.163.com/#/user/home?id=100471707)
-
 * **邮件**：<prozm.bad@gmail.com>
 
 
