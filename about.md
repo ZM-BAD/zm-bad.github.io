@@ -4,7 +4,7 @@ title: 关于
 permalink: /about/
 ---
 
-程序员一名，目前主要从事Java后端开发，正在朝着全栈方向努力。常用昵称：ZM-BAD，zm_bad。
+程序员一名，目前主要从事Java后端 & AI Agent开发，正在朝着全栈方向努力，日常沉迷Vibe Coding。常用昵称：ZM-BAD，zm_bad。
 
 
 # 个人经历
@@ -18,7 +18,7 @@ permalink: /about/
 
 * [极氪](https://www.zeekrlife.com) 2023.12 ~ 2024.12 交付履约
   
-* [吉利](https://www.zgh.com/) 2024.12 ~ 至今 AI中台
+* [吉利控股](https://www.zgh.com/) 2024.12 ~ 至今 AI中台
 
 # 社交账号
 * **知乎**：[ZM-BAD](https://www.zhihu.com/people/ref13ct)

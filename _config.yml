@@ -14,14 +14,10 @@ email: prozm.bad@gmail.com
 permalink: /:year/:month/:day/:title/
 exclude: ["README.md", "changelog.md", "server", "tools", "Pipfile"]
 plugins: [jekyll-paginate]
-markdown: redcarpet
-redcarpet:
-    extensions: ["fenced_code_blocks",
-                 "tables",
-                 "highlight",
-                 "strikethrough",
-                 "no_intra_emphasis",
-                 "with_toc_data"]
+markdown: kramdown
+kramdown:
+    input: GFM
+    syntax_highlighter: rouge
 
 # Pageinate settings
 paginate: 8 # 分页大小
