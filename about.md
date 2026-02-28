@@ -21,6 +21,8 @@ permalink: /about/
 * [吉利控股](https://www.zgh.com/) 2024.12 ~ 至今 AI中台
 
 # 社交账号
+* **X**: [ZM-BAD](https://x.com/zm_bad)
+
 * **知乎**：[ZM-BAD](https://www.zhihu.com/people/ref13ct)
 
 * **微博**：[ZM-BAD](https://weibo.com/u/5318613756)
