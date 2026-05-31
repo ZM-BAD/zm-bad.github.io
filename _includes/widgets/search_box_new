@@ -4,70 +4,104 @@
     </form>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-
-    function find_posts(words, posts_data) {
-        var matched_posts = [];
-
-        posts_data.forEach(function(post) {
-            var content = (new Array(post["title"], post["keywords"])).join(" ");
-            words.forEach(function (word) {
-                if (word === null || word === undefined || word == "") {
-                    return;  // continue
-                }
-                var regex = new RegExp(word, 'i');
-                if (content.match(regex) != null) {
-                    matched_posts.push(post);
-                }
-            });
-        });
-
-        return matched_posts;
+document.addEventListener('DOMContentLoaded', function() {
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
     }
 
-    function show_posts(posts) {
-        var html = '';
+    function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function findPosts(words, postsData) {
+        var matched = [];
+        postsData.forEach(function(post) {
+            var content = [post.title, post.keywords].join(" ");
+            for (var i = 0; i < words.length; i++) {
+                if (!words[i]) continue;
+                if (new RegExp(escapeRegex(words[i]), 'i').test(content)) {
+                    matched.push(post);
+                    break;
+                }
+            }
+        });
+        return matched;
+    }
+
+    function showPosts(posts) {
+        var container = document.querySelector('.content_container');
+        container.innerHTML = '';
         if (posts.length > 0) {
-            for (var i = 0; i < posts.length; i++) {
-                post = posts[i];
-                html += '<div class="post">';
-                html += '<h2 class="post-title">';
-                html += '<a href="' + post.url + '">' + post.title + '</a>';
-                html += '</h2>';
-                html += '<div class="post-meta"><i class="icon-post-date">';
-                html += ' ' + post.date;
-                html += '</i></div>';
-                html += '<div class="post-content">' + post.summary + '</div>';
-                html += '<p class="readmore">';
-                html += '<a href="' + post.url + '">阅读更多</a>';
-                html += '</p>';
-                html += '</div>';
-            }
+            posts.forEach(function(post) {
+                var div = document.createElement('div');
+                div.className = 'post';
+
+                var h2 = document.createElement('h2');
+                h2.className = 'post-title';
+                var a = document.createElement('a');
+                a.href = post.url;
+                a.textContent = post.title;
+                h2.appendChild(a);
+                div.appendChild(h2);
+
+                var meta = document.createElement('div');
+                meta.className = 'post-meta';
+                meta.innerHTML = '<i class="icon-post-date"> ' + escapeHtml(post.date || '') + '</i>';
+                div.appendChild(meta);
+
+                var content = document.createElement('div');
+                content.className = 'post-content';
+                content.textContent = post.summary || '';
+                div.appendChild(content);
+
+                var readmore = document.createElement('p');
+                readmore.className = 'readmore';
+                var link = document.createElement('a');
+                link.href = post.url;
+                link.textContent = '阅读更多';
+                readmore.appendChild(link);
+                div.appendChild(readmore);
+
+                container.appendChild(div);
+            });
         } else {
-            html += "<h4>您输入的关键词没有搜索结果，请更换关键词！ O(∩_∩)O~</h4>"
+            var h4 = document.createElement('h4');
+            h4.textContent = '您输入的关键词没有搜索结果，请更换关键词！ O(∩_∩)O~';
+            container.appendChild(h4);
         }
-        $('.content_container').html(html);
-        $('.content_container').show();
+        container.style.display = '';
     }
 
-    $('#search-form').submit(function() {
-        var query = $('#query').val();
-        var words = query.split(" ")
+    var form = document.getElementById('search-form');
+    var queryInput = document.getElementById('query');
 
-        $('#query').blur().attr('disabled', true);
-        $('.content_container').hide();
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var query = queryInput.value;
+        var words = query.split(/\s+/);
+        queryInput.blur();
+        queryInput.disabled = true;
+        document.querySelector('.content_container').style.display = 'none';
 
-        $.ajax({
-            url: "/assets/data/posts.json",
-            dataType: "json",
-            timeout: 6000,  // 6 sec
-            success: function(data) {
-                matched_posts = find_posts(words, data);
-                show_posts(matched_posts);
-            }
-        });
-
-        $('#query').blur().attr('disabled', false);
+        fetch('{{ "/assets/data/posts.json" | prepend: site.baseurl }}')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                var matched = findPosts(words, data);
+                showPosts(matched);
+            })
+            .catch(function() {
+                var container = document.querySelector('.content_container');
+                container.innerHTML = '';
+                var h4 = document.createElement('h4');
+                h4.textContent = '搜索请求失败，请稍后重试。';
+                container.appendChild(h4);
+                container.style.display = '';
+            })
+            .finally(function() {
+                queryInput.disabled = false;
+            });
 
         return false;
     });

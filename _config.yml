@@ -9,23 +9,24 @@ page_no_title: "燎原之火 | ZM-BAD的小站"
 beian: # "备案号"
 author: ZM-BAD
 email: prozm.bad@gmail.com
+baidu_analytics: 47d019804542b27d414d139c3d142022
 
 # Build settings
 permalink: /:year/:month/:day/:title/
-exclude: ["README.md", "changelog.md", "server", "tools", "Pipfile"]
-plugins: [jekyll-paginate]
+exclude: ["README.md", "changelog.md", "server", "tools", "Pipfile", "Gemfile", "Gemfile.lock", "vendor"]
+plugins: [jekyll-paginate-v2, jekyll-feed, jekyll-sitemap]
 markdown: kramdown
 kramdown:
     input: GFM
     syntax_highlighter: rouge
 
-# Pageinate settings
-paginate: 8 # 分页大小
-paginate_path: "page/:num/"
-
-# Search settings
-baidu_search: true
-google_search: true
+# Pagination settings (jekyll-paginate-v2)
+pagination:
+  enabled: true
+  per_page: 8
+  permalink: "/page/:num/"
+  sort_field: "date"
+  sort_reverse: true
 
 # Menu settings
 menu:

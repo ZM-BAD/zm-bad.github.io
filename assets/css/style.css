@@ -26,12 +26,6 @@ body {
 	padding-top: 20px;
 }
 
-#fb_comments_container {
-	margin-top: 35px;
-	padding-top: 20px;
-	border-top: 1px solid rgba(150, 150, 150, 0.2);
-}
-
 a, button.submit {
 	color: #6E7173;
 	text-decoration: none;
@@ -187,14 +181,6 @@ a:focus {
 	box-shadow: none;
 }
 
-/* title for search result or tagged posts*/
-.label-title {
-	margin-top: 1.1em;
-	font-size: 20px;
-	font-weight: normal;
-	color: #888;
-}
-
 .post {
 	padding: 25px 0 15px;
 }
@@ -215,24 +201,6 @@ a:focus {
 	margin: 12px 0 0;
 	color: #999;
 	float: left;
-	display: inline;
-	text-indent: .15em;
-}
-
-.post .ds-thread-count {
-	padding: 0;
-	margin: 12px 0 0;
-	color: #999;
-	float: right;
-	display: inline;
-	text-indent: .15em;
-}
-
-.post .disqus-comment-count {
-	padding: 0;
-	margin: 12px 0 0;
-	color: #999;
-	float: right;
 	display: inline;
 	text-indent: .15em;
 }
@@ -557,10 +525,6 @@ pre code {
 	white-space: pre-wrap;
 	background-color: transparent;
 	border: 0;
-}
-
-.hidden1 {
-	display: none;
 }
 
 /* back-to-top rocket*/
@@ -975,8 +939,6 @@ table tr:nth-child(2n) {
     display: none;
 }
 
-.post-toc {
-    &>ul {
-        overflow: auto;
-    }
+.post-toc > ul {
+    overflow: auto;
 }

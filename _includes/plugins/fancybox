@@ -1,3 +1,28 @@
-<script src="/assets/js/fancybox.pack.js" type="text/javascript"></script>
-<script src="/assets/js/jquery.fancybox.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/assets/css/jquery.fancybox.css" type="text/css">
+<link rel="stylesheet" href="{{ "/assets/css/glightbox.min.css" | prepend: site.baseurl }}" type="text/css">
+<script src="{{ "/assets/js/glightbox.min.js" | prepend: site.baseurl }}" type="text/javascript"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+  var images = document.querySelectorAll('.content_container img');
+  images.forEach(function(img) {
+    if (img.classList.contains('nofancybox')) return;
+    if (img.parentElement.classList.contains('glightbox')) return;
+    var alt = img.getAttribute('alt') || '';
+    var src = img.getAttribute('data-src') || img.getAttribute('src');
+    var a = document.createElement('a');
+    a.setAttribute('href', src);
+    a.className = 'glightbox';
+    if (alt) {
+      a.setAttribute('data-glightbox', 'title:' + alt);
+    }
+    img.parentNode.insertBefore(a, img);
+    a.appendChild(img);
+    if (alt) {
+      var caption = document.createElement('span');
+      caption.className = 'caption';
+      caption.textContent = alt;
+      a.parentNode.insertBefore(caption, a.nextSibling);
+    }
+  });
+  GLightbox({ selector: '.glightbox' });
+});
+</script>
