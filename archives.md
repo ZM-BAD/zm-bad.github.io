@@ -8,9 +8,9 @@ permalink: /archives/
   <div class="post-archive">
   {% for post in site.posts  %}
       {% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
-      {% capture this_month %}{{ post.date | date: "%B" }}{% endcapture %}
+      {% capture this_month %}{{ post.date | date: "%-m月" }}{% endcapture %}
       {% capture next_year %}{{ post.previous.date | date: "%Y" }}{% endcapture %}
-      {% capture next_month %}{{ post.previous.date | date: "%B" }}{% endcapture %}
+      {% capture next_month %}{{ post.previous.date | date: "%-m月" }}{% endcapture %}
 
       {% if forloop.first %}
         <h2>{{this_year}}</h2>
@@ -18,7 +18,7 @@ permalink: /archives/
         <ul>
       {% endif %}
 
-      <li><span class="date">{{ post.date | date: "%B %e, %Y" }}</span><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
+      <li><span class="date">{{ post.date | date: "%Y年%m月%d日" }}</span><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
 
       {% if forloop.last %}
         </ul>

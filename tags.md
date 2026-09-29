@@ -16,7 +16,7 @@ permalink: /tags/
   <h3 id="{{ tag | first }}">{{ tag | first }}</h3>
   <ul>
       {% for post in tag.last %}
-          <li><span class="date">{{ post.date | date: "%B %e, %Y" }}</span><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
+          <li><span class="date">{{ post.date | date: "%Y年%m月%d日" }}</span><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
       {% endfor %}
   </ul>
   {% endfor %}
