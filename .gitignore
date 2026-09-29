@@ -1,3 +1,9 @@
+# Astro
+dist/
+.astro/
+node_modules/
+
+# 旧 Jekyll 产物（迁移完成后已无 Jekyll）
 _site/
 .sass-cache/
 .jekyll-metadata
@@ -7,7 +13,6 @@ __pycache__/
 *$py.class
 build/
 develop-eggs/
-dist/
 eggs/
 .eggs/
 sdist/

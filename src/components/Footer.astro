@@ -1,0 +1,11 @@
+---
+// 移植自 _layouts/base.html 的 #footer 段落
+// 年份刻意保持原来的「运行时由 JS 取当前年」——若在构建时写死，
+// 不重新部署的话年份会一直停在打包那天。
+import { site } from '../site';
+---
+<div id="footer">
+  Copyright &copy; 2017-<span id="cur_year"></span> <a href="https://zmbad.me">ZM-BAD</a> - All Rights Reserved.
+  Powered by <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> @ <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub.com</a>
+  <script is:inline>var cur_date = new Date();document.getElementById("cur_year").innerHTML = cur_date.getFullYear();</script>
+</div>

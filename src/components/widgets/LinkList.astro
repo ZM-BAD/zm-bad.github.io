@@ -1,0 +1,12 @@
+---
+// 移植自 _includes/widgets/link_list
+import { site } from '../../site';
+---
+<div class="widget">
+  <div class="widget-title"><i class="icon-link"> 友情链接</i></div>
+  <ul class="link-list">
+    {site.links.map((l) => (
+      <li class="link-list-item"><a href={l.url} title={l.title} target="_blank" rel="noopener noreferrer">{l.title}</a></li>
+    ))}
+  </ul>
+</div>

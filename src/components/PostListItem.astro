@@ -1,0 +1,16 @@
+---
+// 移植自 index.html 里每个文章的列表项结构（类名原样）
+import { postUrl, postDateCN } from '../lib/posts';
+import type { Post } from '../lib/posts';
+
+interface Props { post: Post; excerpt: string }
+const { post, excerpt } = Astro.props;
+---
+<div class="post">
+  <h2 class="post-title">
+    <a href={postUrl(post)}>{post.data.title}</a>
+  </h2>
+  <div class="post-meta"><i class="icon-post-date"> {postDateCN(post)}</i></div>
+  <div class="post-content">{excerpt}</div>
+  <p class="readmore"><a href={postUrl(post)}>阅读更多</a></p>
+</div>

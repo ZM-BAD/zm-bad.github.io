@@ -1,0 +1,22 @@
+---
+// 首页（第 1 页）。分页逻辑与原 jekyll-paginate-v2 一致：per_page = 8
+import Base from '../layouts/Base.astro';
+import PostListItem from '../components/PostListItem.astro';
+import { getSortedPosts } from '../lib/posts';
+import { getExcerpt } from '../lib/excerpt';
+import { site } from '../site';
+
+const posts = await getSortedPosts();
+const perPage = site.perPage;
+const totalPages = Math.max(1, Math.ceil(posts.length / perPage));
+const pagePosts = posts.slice(0, perPage);
+const excerpts = await Promise.all(pagePosts.map(getExcerpt));
+---
+<Base>
+  {pagePosts.map((post, i) => <PostListItem post={post} excerpt={excerpts[i]} />)}
+
+  <div class="page-navigator">
+    {totalPages > 1 && <a href="/page/2/" class="next">下一页</a>}
+    <span class="page-number">第 1/{totalPages} 页</span>
+  </div>
+</Base>

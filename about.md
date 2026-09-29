@@ -1,7 +1,5 @@
 ---
-layout: page
 title: 关于
-permalink: /about/
 ---
 
 程序员一名，目前主要从事Java后端 & AI Agent开发，正在朝着全栈方向努力，日常沉迷Vibe Coding。常用昵称：ZM-BAD，zm_bad。

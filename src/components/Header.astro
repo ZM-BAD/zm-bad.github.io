@@ -1,0 +1,32 @@
+---
+// 移植自 _layouts/base.html 的 #header 段落
+// 导航高亮原来是页面底部一段内联 JS，这里改成服务端判定（逻辑完全一致）
+import { site } from '../site';
+
+interface Props { pageTitle: string }
+const { pageTitle } = Astro.props;
+
+const path = Astro.url.pathname;
+const hrefs = site.menu.map((m) => `/${m.directory}`);
+
+// 原 JS 的循环从 i=1 开始（跳过「首页」），都不匹配时才回落到首页
+let currentIdx = 0;
+for (let i = 1; i < hrefs.length; i++) {
+  if (path.startsWith(hrefs[i])) { currentIdx = i; break; }
+}
+---
+
+<div id="header">
+  <div class="site-name">
+    <h1 class="hidden">{pageTitle}</h1>
+    <a id="logo" href="/">{site.title}</a>
+    <p class="description">{site.subtitle}，热爱思考</p>
+  </div>
+  <div id="nav-menu">
+    {site.menu.map((m, i) => (
+      <a href={hrefs[i]} class={i === currentIdx ? 'current' : undefined}>
+        <i class={m.icon}> {m.page}</i>
+      </a>
+    ))}
+  </div>
+</div>

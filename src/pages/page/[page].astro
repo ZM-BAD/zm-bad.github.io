@@ -1,0 +1,39 @@
+---
+// 第 2..N 页。URL 形如 /page/2/
+import Base from '../../layouts/Base.astro';
+import PostListItem from '../../components/PostListItem.astro';
+import { getSortedPosts } from '../../lib/posts';
+import { getExcerpt } from '../../lib/excerpt';
+import { site } from '../../site';
+
+export async function getStaticPaths() {
+  const posts = await getSortedPosts();
+  const perPage = site.perPage;
+  const totalPages = Math.max(1, Math.ceil(posts.length / perPage));
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => {
+    const n = i + 2;                       // 从第 2 页开始
+    return {
+      params: { page: String(n) },
+      props: {
+        pagePosts: posts.slice((n - 1) * perPage, n * perPage),
+        current: n,
+        totalPages,
+      },
+    };
+  });
+}
+
+const { pagePosts, current, totalPages } = Astro.props;
+const excerpts = await Promise.all(pagePosts.map(getExcerpt));
+---
+<Base title={`${site.title} - page ${current}`}>
+  {pagePosts.map((post, i) => <PostListItem post={post} excerpt={excerpts[i]} />)}
+
+  <div class="page-navigator">
+    {current === 2
+      ? <a href="/" class="previous">上一页</a>
+      : <a href={`/page/${current - 1}/`} class="previous">上一页</a>}
+    <span class="page-number">第 {current}/{totalPages} 页</span>
+    {current < totalPages && <a href={`/page/${current + 1}/`} class="next">下一页</a>}
+  </div>
+</Base>

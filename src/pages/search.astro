@@ -1,0 +1,50 @@
+---
+// 移植自 search.md。
+// 原页面用 jQuery 做过滤，这里改成原生 JS —— jQuery 全站唯一的用户就是它，
+// 换成原生后 88KB 的 jquery.min.js 就不必再加载了。
+import Base from '../layouts/Base.astro';
+import { getSortedPosts, postUrl, postDateISO } from '../lib/posts';
+
+const posts = await getSortedPosts();
+---
+<Base title="搜索">
+  <script is:inline>
+    var key = location.pathname;
+    key = key.substring('/search/'.length);
+    if (key.indexOf('/') != -1) { key = ''; }
+  </script>
+
+  <p>正在查看 "<span id="search-key"></span>" 下的文章</p>
+
+  <div class="post">
+    <div class="post-archive">
+      {posts.map((p) => (
+        <ul class="listing" style="display: none;">
+          <li>
+            <span class="date">{postDateISO(p).replace(/-/g, '/')}</span>
+            <a href={postUrl(p)}>{p.data.title}</a>
+          </li>
+        </ul>
+      ))}
+    </div>
+  </div>
+
+  <script is:inline>
+    window.addEventListener('load', function () {
+      document.getElementById('search-key').textContent = key;
+      var k = key.toLowerCase();
+      var items = Array.prototype.slice.call(document.querySelectorAll('.post-archive a'));
+      items.forEach(function (item) {
+        var ul = item.parentElement.parentElement;   // ul.listing
+        if (item.textContent.toLowerCase().indexOf(k) === -1) {
+          ul.remove();
+        } else {
+          ul.style.display = '';
+        }
+      });
+      if (document.querySelectorAll('.post-archive a').length === 0) {
+        document.querySelector('.post-archive').innerHTML = '<font color="red">没有记录</font>';
+      }
+    });
+  </script>
+</Base>

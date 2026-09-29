@@ -1,0 +1,31 @@
+---
+// 移植自 tags.md
+import Base from '../layouts/Base.astro';
+import { getSortedPosts, postUrl, postDateCN } from '../lib/posts';
+import { groupsInJekyllOrder } from '../lib/grouping';
+
+const posts = await getSortedPosts();
+const tags = groupsInJekyllOrder(posts, 'tags');
+---
+<Base title="标签">
+  <div id="tags">
+    <ul id="label_box">
+      {[...tags.entries()].map(([name, list]) => (
+        <li><a href={`/tags/#${name}`}>{name} <span>{list.length}</span></a></li>
+      ))}
+    </ul>
+
+    <div class="post post-archive">
+      {[...tags.entries()].map(([name, list]) => (
+        <>
+          <h3 id={name}>{name}</h3>
+          <ul>
+            {list.map((p) => (
+              <li><span class="date">{postDateCN(p)}</span><a href={postUrl(p)}>{p.data.title}</a></li>
+            ))}
+          </ul>
+        </>
+      ))}
+    </div>
+  </div>
+</Base>

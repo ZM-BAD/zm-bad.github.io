@@ -1,0 +1,87 @@
+---
+// 移植自 _layouts/post.html。URL 结构 /:year/:month/:day/:title/ 与原站一字不差
+import { render } from 'astro:content';
+import Base from '../../../../layouts/Base.astro';
+import { getSortedPosts, postUrl, postDateCN, postDateISO } from '../../../../lib/posts';
+import { idToPath } from '../../../../lib/slug';
+import type { Post } from '../../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getSortedPosts();   // 已按日期倒序
+  return posts.map((post, i) => {
+    const p = idToPath(post.id);
+    return {
+      params: { year: p.year, month: p.month, day: p.day, slug: p.slug },
+      // 上下篇语义对齐 Jekyll：
+      //   page.previous = 更旧的一篇（倒序数组里的后一个）
+      //   page.next     = 更新的一篇（倒序数组里的前一个）
+      props: { post, older: posts[i + 1] ?? null, newer: posts[i - 1] ?? null },
+    };
+  });
+}
+
+interface Props { post: Post; older: Post | null; newer: Post | null }
+const { post, older, newer } = Astro.props;
+const { Content } = await render(post);
+
+// 标签：front matter 里可能是字符串、空格分隔，或数组
+const rawTags = post.data.tags;
+const tags: string[] = !rawTags ? []
+  : Array.isArray(rawTags) ? rawTags
+  : rawTags.split(/\s+/).filter(Boolean);
+const categories = post.data.category ? [post.data.category] : [];
+---
+<Base title={post.data.title} keywords={post.data.keywords}>
+  <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">{post.data.title}</h1>
+      <p class="post-meta">
+        <time datetime={postDateISO(post)} itemprop="datePublished">
+          <i class="icon-post-date">{postDateCN(post)}</i>
+        </time>
+        {categories.length > 0 && <> | <span class="post-category"><i class="icon-post-category">
+          {categories.map((c) => <a href={`/category/#${c}`}>{c}</a>)}
+        </i></span></>}
+        {tags.length > 0 && <> | <span class="post-tag"><i class="icon-post-tag">
+          {tags.map((t) => <a href={`/tags/#${t}`}>{t}</a>)}
+        </i></span></>}
+      </p>
+    </header>
+
+    <div class="post-content" itemprop="articleBody">
+      <Content />
+    </div>
+
+    <link rel="stylesheet" href="/assets/css/glightbox.min.css" type="text/css">
+    <script src="/assets/js/glightbox.min.js" is:inline></script>
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', function() {
+        var images = document.querySelectorAll('.content_container img');
+        images.forEach(function(img) {
+          if (img.classList.contains('nofancybox')) return;
+          if (img.parentElement.classList.contains('glightbox')) return;
+          var alt = img.getAttribute('alt') || '';
+          var src = img.getAttribute('data-src') || img.getAttribute('src');
+          var a = document.createElement('a');
+          a.setAttribute('href', src);
+          a.className = 'glightbox';
+          if (alt) { a.setAttribute('data-glightbox', 'title:' + alt); }
+          img.parentNode.insertBefore(a, img);
+          a.appendChild(img);
+          if (alt) {
+            var caption = document.createElement('span');
+            caption.className = 'caption';
+            caption.textContent = alt;
+            a.parentNode.insertBefore(caption, a.nextSibling);
+          }
+        });
+        GLightbox({ selector: '.glightbox' });
+      });
+    </script>
+
+    <div class="post-nav">
+      {older && <a href={postUrl(older)} class="pre"><i class="icon-post-pre"> {older.data.title}</i></a>}
+      {newer && <a href={postUrl(newer)} class="next">{newer.data.title} <i class="icon-post-next"></i></a>}
+    </div>
+  </article>
+</Base>

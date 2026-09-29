@@ -18,19 +18,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-        id: pages
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v7
+      # 官方 Action：安装依赖 + 构建 + 上传产物，一步到位
+      # 注意：它会扫描 lockfile 判断包管理器，所以 package-lock.json 必须提交
+      - uses: withastro/action@v6
         with:
-          ruby-version: '3.3'
-          bundler-cache: true
-      - run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
-        env:
-          JEKYLL_ENV: production
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
+          node-version: 22
 
   deploy:
     needs: build
@@ -39,5 +32,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
         id: deployment

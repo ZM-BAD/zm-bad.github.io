@@ -1,0 +1,40 @@
+---
+// 移植自 archives.md（按年/月分组，日期已中文化）
+import Base from '../layouts/Base.astro';
+import { getSortedPosts, postUrl, postDateCN } from '../lib/posts';
+import { idToPath } from '../lib/slug';
+
+const posts = await getSortedPosts();
+
+// 按「年-月」分组，保持倒序
+interface Group { year: string; month: string; items: typeof posts }
+const groups: Group[] = [];
+for (const p of posts) {
+  const [y, m] = idToPath(p.id).date.split('-');
+  const last = groups[groups.length - 1];
+  if (last && last.year === y && last.month === m) last.items.push(p);
+  else groups.push({ year: y, month: m, items: [p] });
+}
+// 每年的第一组前面要输出年份标题
+const isNewYear = (i: number) => i === 0 || groups[i - 1].year !== groups[i].year;
+---
+<Base title="归档">
+  <div class="post">
+    <div class="post-archive">
+      {groups.map((g, i) => (
+        <>
+          {isNewYear(i) && <h2>{g.year}</h2>}
+          <h3>{Number(g.month)}月</h3>
+          <ul>
+            {g.items.map((p) => (
+              <li>
+                <span class="date">{postDateCN(p)}</span>
+                <a href={postUrl(p)}>{p.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      ))}
+    </div>
+  </div>
+</Base>

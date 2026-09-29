@@ -1,0 +1,33 @@
+---
+// 移植自 category.md
+import Base from '../layouts/Base.astro';
+import { getSortedPosts, postUrl, postDateCN } from '../lib/posts';
+import { groupsInJekyllOrder } from '../lib/grouping';
+
+const posts = await getSortedPosts();
+const categories = groupsInJekyllOrder(posts, 'category');
+---
+<Base title="分类">
+  <div class="category">
+    <h1>文章分类</h1>
+
+    <ul id="categories">
+      {[...categories.entries()].map(([name, list]) => (
+        <li><a href={`/category/#${name}`}>{name}({list.length})</a></li>
+      ))}
+    </ul>
+
+    <div class="post post-archive">
+      {[...categories.entries()].map(([name, list]) => (
+        <>
+          <h3 id={name}>{name}</h3>
+          <ul class="arc-list">
+            {list.map((p) => (
+              <li><span class="date">{postDateCN(p)}</span><a href={postUrl(p)}>{p.data.title}</a></li>
+            ))}
+          </ul>
+        </>
+      ))}
+    </div>
+  </div>
+</Base>
