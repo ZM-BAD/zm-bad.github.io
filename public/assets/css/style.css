@@ -266,6 +266,13 @@ a:focus {
 
 .post .post-content img {
 	max-width: 100%;
+	/* ★ height: auto 是必需的，别删。
+	   HTML 的 width/height 属性会被当成 height:3106px 这样的实值应用，
+	   而 max-width:100% 只压宽度不压高度 —— 少了这一行，图片会被垂直拉伸：
+	   1444 宽的图在 722px 的正文列里，高度会是正确值的 2 倍（显得又瘦又高）。
+	   加上 height:auto 后，浏览器仍会用属性里的宽高比预留占位空间（防跳动），
+	   加载完再按真实比例显示，两个目的都达到。 */
+	height: auto;
 	padding: 0.5em 0;
 	margin: auto;
 	display: block;
@@ -749,13 +756,16 @@ figure {  margin: 0; }
 /* icomoon icon fonts*/
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?jhbhm');
-  src:  url('../fonts/icomoon.eot?jhbhm#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?jhbhm') format('truetype'),
-    url('../fonts/icomoon.woff?jhbhm') format('woff'),
-    url('../fonts/icomoon.svg?jhbhm#icomoon') format('svg');
+  /* 只保留 woff2 + woff。浏览器只会下载它认识的第一种格式：
+     现代浏览器拿到 woff2（2.2KB），woff（4KB）仅供 2018 年前的浏览器兜底。
+     原 .eot（只有 IE≤11 认）、.ttf（Android≤4.3）、.svg（SVG 字体格式早已废弃）
+     三个文件合计 19.6KB，已无任何浏览器需要，一并移除。
+     font-display: swap 避免图标字体加载期间出现空白。 */
+  src:  url('../fonts/icomoon.woff2?jhbhm') format('woff2'),
+    url('../fonts/icomoon.woff?jhbhm') format('woff');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 [class^="icon-"], [class*=" icon-"] {

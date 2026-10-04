@@ -23,7 +23,8 @@ jobs:
       # 注意：它会扫描 lockfile 判断包管理器，所以 package-lock.json 必须提交
       - uses: withastro/action@v6
         with:
-          node-version: 22
+          # 与 .nvmrc / package.json engines 保持一致（24 = 当前 Active LTS）
+          node-version: 24
 
   deploy:
     needs: build

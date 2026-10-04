@@ -1,16 +1,22 @@
 ---
-// 原 404.html 是独立的裸 HTML，这里套上站点布局，路径仍是 /404.html
+// 404 页。GitHub Pages 会把 dist/404.html 用于所有未命中的路径。
+//
+// ★ 必须套 Base 布局。之前的版本是个裸 HTML，只写了几行内联样式 ——
+//   结果是不加载 style.css，没有页头、导航、侧栏、页脚，和站点完全脱节。
+import Base from '../layouts/Base.astro';
 ---
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - 页面未找到</title>
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-</head>
-<body style="font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4rem 2rem; color: #444;">
-  <h1 style="font-size: 3rem; margin: 0 0 1rem;">404</h1>
-  <p>页面未找到，<a href="https://zmbad.me">返回首页</a></p>
-</body>
-</html>
+<Base title="404 - 页面未找到">
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">404</h1>
+    </header>
+
+    <div class="post-content">
+      <p>没有这个页面。</p>
+      <p>
+        可能是链接过期了，或者地址敲错了。从<a href="/">首页</a>、
+        <a href="/archives/">归档</a>或<a href="/tags/">标签</a>应该能找到你要的东西。
+      </p>
+    </div>
+  </article>
+</Base>

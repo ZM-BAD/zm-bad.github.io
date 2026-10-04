@@ -1,25 +1,15 @@
-# Astro
-dist/
-.astro/
+# 依赖
 node_modules/
 
-# 旧 Jekyll 产物（迁移完成后已无 Jekyll）
-_site/
-.sass-cache/
-.jekyll-metadata
+# 构建产物
+dist/
+.astro/
 
+# 编辑器 / 系统
+.DS_Store
+.idea/
+*.swp
+
+# Python（tools/create-post.py 用）
 __pycache__/
 *.py[cod]
-*$py.class
-build/
-develop-eggs/
-eggs/
-.eggs/
-sdist/
-*.egg-info/
-.installed.cfg
-*.egg
-
-Pipfile.lock
-.DS_Store
-.ftpconfig

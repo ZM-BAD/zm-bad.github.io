@@ -4,6 +4,7 @@ import { render } from 'astro:content';
 import Base from '../../../../layouts/Base.astro';
 import { getSortedPosts, postUrl, postDateCN, postDateISO } from '../../../../lib/posts';
 import { idToPath } from '../../../../lib/slug';
+import { getExcerpt } from '../../../../lib/excerpt';
 import type { Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
@@ -30,8 +31,23 @@ const tags: string[] = !rawTags ? []
   : Array.isArray(rawTags) ? rawTags
   : rawTags.split(/\s+/).filter(Boolean);
 const categories = post.data.category ? [post.data.category] : [];
+
+// 分享卡片配图：取正文第一张图。没有图的文章不传，卡片退化为纯文字（不会破图）
+const ogImage = post.body?.match(/<img[^>]+src="(\/images\/[^"]+)"/)?.[1] ?? null;
+
+// 卡片/搜索描述：优先用手写 description，没写就从正文自动截。
+// 以前这里不传 description，导致 10 篇文章的 og:description 全是同一句站点简介。
+const autoExcerpt = await getExcerpt(post);
+const description = post.data.description
+  ?? (autoExcerpt.length > 160 ? autoExcerpt.slice(0, 160).trimEnd() + '…' : autoExcerpt);
 ---
-<Base title={post.data.title} keywords={post.data.keywords}>
+<Base
+  title={post.data.title}
+  keywords={post.data.keywords}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+>
   <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
     <header class="post-header">
       <h1 class="post-title" itemprop="name headline">{post.data.title}</h1>
