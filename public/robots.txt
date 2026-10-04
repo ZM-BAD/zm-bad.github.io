@@ -1,4 +1,4 @@
-# robots.txt  
+# robots.txt
 User-agent: *
-Disallow: 
-Sitemap: https://zmbad.me/sitemap.xml
+Disallow:
+Sitemap: https://zmbad.me/sitemap-index.xml

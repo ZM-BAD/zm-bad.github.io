@@ -1,49 +1,69 @@
 ---
-// 原页面用 jQuery 做过滤，这里改成原生 JS —— jQuery 全站唯一的用户就是它，
-// 换成原生后 88KB 的 jquery.min.js 就不必再加载了。
 import Base from '../layouts/Base.astro';
-import { getSortedPosts, postUrl, postDateISO } from '../lib/posts';
-
-const posts = await getSortedPosts();
 ---
 <Base title="搜索">
-  <script is:inline>
-    var key = location.pathname;
-    key = key.substring('/search/'.length);
-    if (key.indexOf('/') != -1) { key = ''; }
-  </script>
-
-  <p>正在查看 "<span id="search-key"></span>" 下的文章</p>
-
   <div class="post">
+    <h1 class="post-title">搜索</h1>
+
+    <form class="search-form" action="/search/" method="get">
+      <input type="text" name="q" placeholder="Search" class="search-form-input" id="query">
+    </form>
+
     <div class="post-archive">
-      {posts.map((p) => (
-        <ul class="listing" style="display: none;">
-          <li>
-            <span class="date">{postDateISO(p).replace(/-/g, '/')}</span>
-            <a href={postUrl(p)}>{p.data.title}</a>
-          </li>
-        </ul>
-      ))}
+      <p id="search-status"></p>
+      <ul class="listing" id="search-results"></ul>
     </div>
   </div>
 
+  {/* ★ 必须 is:inline：用被 Astro 处理的 <script> 时，Vite 会把
+      import('/pagefind/pagefind.js') 包进它的预加载助手，运行时失败。
+      is:inline 原样输出，动态 import 才能落到 pagefind 真正生成的路径上。 */}
   <script is:inline>
-    window.addEventListener('load', function () {
-      document.getElementById('search-key').textContent = key;
-      var k = key.toLowerCase();
-      var items = Array.prototype.slice.call(document.querySelectorAll('.post-archive a'));
-      items.forEach(function (item) {
-        var ul = item.parentElement.parentElement;   // ul.listing
-        if (item.textContent.toLowerCase().indexOf(k) === -1) {
-          ul.remove();
-        } else {
-          ul.style.display = '';
+    (async function () {
+      // 索引由 pagefind 在 `astro build` 之后生成，dev 下不存在 —— 整个块要容错
+      var q = (new URLSearchParams(location.search).get('q') || '').trim();
+      var input = document.getElementById('query');
+      var status = document.getElementById('search-status');
+      var list = document.getElementById('search-results');
+      input.value = q;
+
+      function row(title, url, excerpt) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = url;
+        a.textContent = title;
+        li.appendChild(a);
+        if (excerpt) {
+          var d = document.createElement('div');
+          d.className = 'search-excerpt';
+          // excerpt 是 pagefind 从本站正文生成的，含 <mark> 高亮
+          d.innerHTML = excerpt;
+          li.appendChild(d);
         }
-      });
-      if (document.querySelectorAll('.post-archive a').length === 0) {
-        document.querySelector('.post-archive').innerHTML = '<font color="red">没有记录</font>';
+        return li;
       }
-    });
+
+      if (!q) {
+        status.textContent = '输入关键词开始搜索。';
+        return;
+      }
+      status.textContent = '正在搜索…';
+      try {
+        var pagefind = await import('/pagefind/pagefind.js');
+        var found = await pagefind.search(q);
+        var results = await Promise.all(found.results.slice(0, 10).map(function (r) { return r.data(); }));
+        list.replaceChildren();
+        if (results.length === 0) {
+          status.textContent = '没有匹配「' + q + '」的文章。';
+        } else {
+          status.textContent = '找到 ' + found.results.length + ' 篇：';
+          results.forEach(function (r) {
+            list.appendChild(row((r.meta && r.meta.title) || r.url, r.url, r.excerpt));
+          });
+        }
+      } catch (e) {
+        status.textContent = '搜索索引不可用（开发模式下不生成索引，跑一次 npm run build 即可）。';
+      }
+    })();
   </script>
 </Base>

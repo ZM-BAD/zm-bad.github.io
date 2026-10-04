@@ -403,6 +403,19 @@ a:focus {
 	padding-right: .7em;
 }
 
+/* 搜索结果摘要（pagefind 生成，含 <mark> 高亮） */
+.post-archive .search-excerpt {
+	font-size: 14px;
+	line-height: 1.7;
+	color: #666;
+	margin: .2em 0 .9em 1.4em;
+}
+
+.post-archive .search-excerpt mark {
+	background: #FFF3B8;
+	color: inherit;
+}
+
 #categories {
     margin-left: -20px;
 }

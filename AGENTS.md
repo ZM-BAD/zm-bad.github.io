@@ -13,8 +13,11 @@ URL: https://zmbad.me | Custom domain via CNAME.
 |-----------|---------|-------|
 | Astro | 7.x（内部用 zod v4） | 静态站点生成器 |
 | Node | **24 LTS** | CI 与 `.nvmrc` 一致；`engines` 要求 `>=22.12.0` |
-| Markdown | Astro 内置 (remark/rehype) | 原为 kramdown GFM |
-| PureCSS | 3.0.0 | 网格框架（CSS 原样保留，内部已内嵌 normalize v8.0.1） |
+| Markdown | **satteri**（Astro 7 默认，Rust） | GFM + smart punctuation 默认开 |
+| Sitemap | `@astrojs/sitemap` | 产物是 `sitemap-index.xml` + `sitemap-0.xml` |
+| Feed | `@astrojs/rss` | **RSS 2.0**（含全文），地址仍是 `/feed.xml` |
+| 搜索 | **Pagefind** | 构建后索引，见 `npm run build` |
+| PureCSS | 3.0.0 | 网格框架（内部已内嵌 normalize v8.0.1） |
 | GLightbox | 3.3.1 | 图片灯箱 |
 | 图片 | **WebP q88** | 最长边 1444px = 正文列 722px 的 2 倍（Retina） |
 | 图标字体 | icomoon **woff2 + woff** | 只要这两种格式 |
@@ -23,8 +26,8 @@ URL: https://zmbad.me | Custom domain via CNAME.
 
 ```bash
 npm install        # 安装依赖
-npm run dev        # 本地开发服务器 http://localhost:4321
-npm run build      # 生产构建到 dist/
+npm run dev        # 开发服务器 http://localhost:4321 ★ 搜索不可用（无索引）
+npm run build      # astro build + pagefind 索引 → dist/
 npm run preview    # 预览构建产物
 ```
 
@@ -48,7 +51,7 @@ src/
   layouts/Base.astro         # 主布局（页头/侧栏/页脚）
   components/                # Header / Footer / Sidebar / PostListItem
   components/widgets/        # 7 个侧栏组件
-  pages/                     # 路由
+  pages/                     # 路由（sitemap / feed / 搜索都是这里的手写端点）
 .github/workflows/deploy.yml # CI/CD
 ```
 
@@ -75,7 +78,9 @@ src/
   > 加载完再按真实比例显示。**改完记得量一遍实际渲染尺寸。**
 - **资源路径**：直接用 `/assets/...` 绝对路径（不再有 `site.baseurl` 前缀问题）。
 - **评论**：已移除。要加就用 Giscus 或 Utterances。
-- **搜索**：`/assets/data/posts.json` 现在**由构建自动生成**（`src/pages/assets/data/posts.json.ts`），不再需要手工维护，也不会过期。
+- **搜索**：Pagefind，构建后跑索引（在 `npm run build` 里）。侧栏表单跳到 `/search/?q=`，
+  搜索页用 **`is:inline`** 脚本动态 `import('/pagefind/pagefind.js')` —— 用普通的 `<script>`
+  会被 Vite 包进预加载助手而失效。索引只收 `data-pagefind-body` 内的内容（在 `posts/[slug].astro`）。
 - **回顶部**：`totop.js`，纯原生 JS。
 
 ## Deployment
@@ -148,9 +153,9 @@ Astro 的 `{arr.map(...)}` 紧挨着输出元素，元素之间**没有空白**�
   当组件名去解析。也不要有 `permalink:`（路由由文件位置决定）。
 - **404 页必须套 `Base` 布局**（`src/pages/404.astro`）。GitHub Pages 用 `dist/404.html`
   兜所有未命中的路径 —— **裸 HTML 会导致它不加载 style.css，和站点完全脱节**。
-- **摘要截断**：`excerpt.ts` 和 `posts.ts` 的 `truncate()` 都是**省略号计入总长**
-  （`n` → 保留 `n-3` 再拼 `...`）。写成 `slice(0, n) + '...'` 会多 3 个字符。
-- **`posts.ts` 的 `bodyToText()` 要剥裸 HTML**：本站插图按约定写 `<img>`，只剥 `![]()` 不够 ——
-  标签会整段漏进搜索摘要，在侧栏搜索框里原样显示给访客。
-- **feed / sitemap 里插 URL 要过 `esc()`**：裸 `&` 会让**整份**文档解析失败（不是单条坏）。
+- **摘要截断**：`excerpt.ts` 的 `truncate` 是**省略号计入总长**（`n` → 保留 `n-3` 再拼 `...`）。
+  写成 `slice(0, n) + '...'` 会多 3 个字符。
+- **sitemap 的 lastmod 来自 front matter 的 `date`**，不是构建时间（构建时间会让每次部署都声称
+  全站都变了）。映射在 `astro.config.mjs` 里读 `_posts/`，键要 `decodeURIComponent` 才能
+  和中文文件名对上。
   Headroom 一篇有 2 处会从 `”` 变成 `“`（Astro 那个是正确写法）。
