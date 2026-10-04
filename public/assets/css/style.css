@@ -205,6 +205,14 @@ a:focus {
 	text-indent: .15em;
 }
 
+/* ★ 间距靠 margin，不依赖 HTML 空白：Jekyll 的 {% for %} 每轮带换行（=空格），
+   Astro 的 .map() 不带 —— 没这行会渲染成「🏷AI」「AI独立开发」。
+   日期图标不加：Jekyll 那边本来就紧贴。 */
+.post .post-meta .post-tag a,
+.post .post-meta .post-category a {
+	margin-left: .5em;
+}
+
 .post .post-content {
 	clear: left;
 	font-size: 15px;
@@ -419,7 +427,9 @@ a:focus {
 	background-image: none;
 	list-style: none;
 	list-style-image: none;
-	display: inline-block
+	display: inline-block;
+	/* ★ 同 .post-tag：li 是 inline-block，间距不能靠 HTML 空白 */
+	margin-right: .5em
 }
 
 #label_box a {

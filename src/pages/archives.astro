@@ -1,8 +1,6 @@
 ---
-// 移植自 archives.md（按年/月分组，日期已中文化）
 import Base from '../layouts/Base.astro';
-import { getSortedPosts, postUrl, postDateCN } from '../lib/posts';
-import { idToPath } from '../lib/slug';
+import { getSortedPosts, postUrl, postDateCN, postDateISO } from '../lib/posts';
 
 const posts = await getSortedPosts();
 
@@ -10,7 +8,7 @@ const posts = await getSortedPosts();
 interface Group { year: string; month: string; items: typeof posts }
 const groups: Group[] = [];
 for (const p of posts) {
-  const [y, m] = idToPath(p.id).date.split('-');
+  const [y, m] = postDateISO(p).split('-');
   const last = groups[groups.length - 1];
   if (last && last.year === y && last.month === m) last.items.push(p);
   else groups.push({ year: y, month: m, items: [p] });

@@ -1,6 +1,6 @@
 ---
-layout: post
 title: DAG-chat
+date: 2026-05-31
 category: 技术
 keywords: AI
 tags: ["Vibe Coding"]

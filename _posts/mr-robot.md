@@ -1,6 +1,6 @@
 ---
-layout: post
 title: Mr. Robot
+date: 2022-06-11
 category: 杂文
 keywords: 日志
 tags: 美剧

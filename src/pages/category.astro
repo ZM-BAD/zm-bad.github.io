@@ -1,11 +1,10 @@
 ---
-// 移植自 category.md
 import Base from '../layouts/Base.astro';
 import { getSortedPosts, postUrl, postDateCN } from '../lib/posts';
-import { groupsInJekyllOrder } from '../lib/grouping';
+import { groupPosts } from '../lib/grouping';
 
 const posts = await getSortedPosts();
-const categories = groupsInJekyllOrder(posts, 'category');
+const categories = groupPosts(posts, 'category');
 ---
 <Base title="分类">
   <div class="category">

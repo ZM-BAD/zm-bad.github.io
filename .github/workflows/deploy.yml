@@ -5,10 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# pages/id-token 只给 deploy job：build 要 npm install 全部依赖，
+# 给它 OIDC 签发权，一个被投毒的传递依赖就能往 Pages 部署任意内容。
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -29,6 +29,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # 只有这一步需要：pages: write 调部署 API，id-token: write 走 OIDC 认证
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

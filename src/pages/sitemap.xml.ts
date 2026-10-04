@@ -1,6 +1,10 @@
 import type { APIRoute } from 'astro';
 import { getSortedPosts, postUrl, postDateISO } from '../lib/posts';
 
+// Jekyll 的 slug 保留 &，裸 & 会让整份 sitemap 解析失败
+const esc = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 // 复刻原 jekyll-sitemap 的输出：全部文章 + 5 个页面（不含 404）
 export const GET: APIRoute = async ({ site }) => {
   const posts = await getSortedPosts();
@@ -14,8 +18,8 @@ export const GET: APIRoute = async ({ site }) => {
 
   const body = entries
     .map(({ loc, lastmod }) =>
-      `  <url>\n    <loc>${loc}</loc>\n` +
-      (lastmod ? `    <lastmod>${lastmod}T00:00:00+08:00</lastmod>\n` : '') +
+      `  <url>\n    <loc>${esc(loc)}</loc>\n` +
+      (lastmod ? `    <lastmod>${esc(lastmod)}T00:00:00+08:00</lastmod>\n` : '') +
       `  </url>`)
     .join('\n');
 

@@ -1,6 +1,6 @@
 ---
-layout: post
 title: Headroom
+date: 2026-08-02
 category: 技术
 keywords: AI 浏览器扩展
 tags: AI 独立开发

@@ -1,12 +1,11 @@
 ---
-// 移植自 _includes/widgets/category_list
 // 顺序必须和 Jekyll 的 site.categories 一致（按文章旧→新首次出现），
 // 不能用 localeCompare 排序——那会变成 技术 → 杂文，与原站不同。
 import { getSortedPosts } from '../../lib/posts';
-import { groupsInJekyllOrder } from '../../lib/grouping';
+import { groupPosts } from '../../lib/grouping';
 
 const posts = await getSortedPosts();
-const categories = groupsInJekyllOrder(posts, 'category');
+const categories = groupPosts(posts, 'category');
 ---
 <div class="widget">
   <div class="widget-title"><i class="icon-category"> 文章分类</i></div>

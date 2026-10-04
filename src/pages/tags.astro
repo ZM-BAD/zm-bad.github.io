@@ -1,11 +1,10 @@
 ---
-// 移植自 tags.md
 import Base from '../layouts/Base.astro';
 import { getSortedPosts, postUrl, postDateCN } from '../lib/posts';
-import { groupsInJekyllOrder } from '../lib/grouping';
+import { groupPosts } from '../lib/grouping';
 
 const posts = await getSortedPosts();
-const tags = groupsInJekyllOrder(posts, 'tags');
+const tags = groupPosts(posts, 'tags');
 ---
 <Base title="标签">
   <div id="tags">

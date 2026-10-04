@@ -1,24 +1,17 @@
 ---
-// 移植自 _layouts/post.html。URL 结构 /:year/:month/:day/:title/ 与原站一字不差
 import { render } from 'astro:content';
-import Base from '../../../../layouts/Base.astro';
-import { getSortedPosts, postUrl, postDateCN, postDateISO } from '../../../../lib/posts';
-import { idToPath } from '../../../../lib/slug';
-import { getExcerpt } from '../../../../lib/excerpt';
-import type { Post } from '../../../../lib/posts';
+import Base from '../../layouts/Base.astro';
+import { getSortedPosts, postUrl, postDateCN, postDateISO } from '../../lib/posts';
+import { getExcerpt } from '../../lib/excerpt';
+import type { Post } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getSortedPosts();   // 已按日期倒序
-  return posts.map((post, i) => {
-    const p = idToPath(post.id);
-    return {
-      params: { year: p.year, month: p.month, day: p.day, slug: p.slug },
-      // 上下篇语义对齐 Jekyll：
-      //   page.previous = 更旧的一篇（倒序数组里的后一个）
-      //   page.next     = 更新的一篇（倒序数组里的前一个）
-      props: { post, older: posts[i + 1] ?? null, newer: posts[i - 1] ?? null },
-    };
-  });
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    // older 是倒序数组里的后一个（更旧），newer 是前一个
+    props: { post, older: posts[i + 1] ?? null, newer: posts[i - 1] ?? null },
+  }));
 }
 
 interface Props { post: Post; older: Post | null; newer: Post | null }
@@ -35,8 +28,7 @@ const categories = post.data.category ? [post.data.category] : [];
 // 分享卡片配图：取正文第一张图。没有图的文章不传，卡片退化为纯文字（不会破图）
 const ogImage = post.body?.match(/<img[^>]+src="(\/images\/[^"]+)"/)?.[1] ?? null;
 
-// 卡片/搜索描述：优先用手写 description，没写就从正文自动截。
-// 以前这里不传 description，导致 10 篇文章的 og:description 全是同一句站点简介。
+// 卡片/搜索描述：优先用手写 description，没写就从正文自动截
 const autoExcerpt = await getExcerpt(post);
 const description = post.data.description
   ?? (autoExcerpt.length > 160 ? autoExcerpt.slice(0, 160).trimEnd() + '…' : autoExcerpt);

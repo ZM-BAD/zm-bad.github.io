@@ -1,5 +1,4 @@
 ---
-// 移植自 _layouts/base.html
 // 类名 / id / 结构全部原样保留，所以 assets/css/style.css 不需要任何改动。
 import { site } from '../site';
 import Header from '../components/Header.astro';
@@ -39,7 +38,6 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : null;
   <title>{headTitle}</title>
   <meta name="keywords" content={headKeywords}>
   <meta name="description" content={headDescription}>
-  <meta name="baidu-site-verification" content="fjE6fa4d3J">
   <meta name="author" content={site.author}>
   <link rel="canonical" href={canonical}>
   <meta name="theme-color" content="#F2F2F2">
@@ -61,29 +59,12 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : null;
   <link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title={site.title} href="/feed.xml">
 
-  <!-- normalize 不单独引：pure-min.css 内部已内嵌 normalize v8.0.1，
-       此处原本再引一份 v3.0.2 属重复加载，且版本比内嵌的旧 5 代 -->
+  <!-- 不引 normalize.css：pure-min.css 内部已内嵌 v8.0.1 -->
   <link rel="stylesheet" type="text/css" href="/assets/css/pure-min.css">
   <link rel="stylesheet" type="text/css" href="/assets/css/grids-responsive-min.css">
-  <!-- ?v= 是缓存戳：改过 style.css 就要把这个数字换掉，否则回访用户拿的是旧 CSS。
-       上次改动：2026-09-30（精简 @font-face / 删掉 .eot/.ttf/.svg 引用） -->
-  <link rel="stylesheet" type="text/css" href="/assets/css/style.css?v=1790698063">
-
-  {site.baiduAnalytics && (
-    /* ★ is:inline 会让 Astro 原样吐出这段 script，里面的 ${...} 不会被求值 ——
-       之前这里直接写 `${site.baiduAnalytics}`，上线后请求的是
-       "hm.js?${site.baiduAnalytics}" 这个字面量，统计一直是死的。
-       要用 define:vars 把值传进去（is:inline 与 define:vars 可以共存）。 */
-    <script is:inline define:vars={{ baiduId: site.baiduAnalytics }}>
-      var _hmt = _hmt || [];
-      (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?" + baiduId;
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  )}
+  <!-- ?v= 是缓存戳：改过 style.css 就换掉这个数字，否则回访用户拿旧 CSS。
+       上次改动：2026-10-04 -->
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css?v=1791096271">
 </head>
 
 <body>
@@ -109,14 +90,5 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : null;
     <a id="rocket" href="#top"></a>
     <script src="/assets/js/totop.js" is:inline></script>
   </div>
-
-  <script is:inline>
-    (function(){
-      var bp = document.createElement('script');
-      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-    })();
-  </script>
 </body>
 </html>
